@@ -8,8 +8,7 @@ const App = () => {
         <div className="col-span-1">
           <div className="mb-4 text-5xl">🧰</div>
           <h1 className="mb-2 text-3xl font-bold">JsonTool</h1>
-          <p>An effective JSON toolbox.</p>
-          <p>Questions? Ping me</p>
+          <p>An effective JSON toolbox with built-in jsonpath navigation.</p>
         </div>
         <div className="col-span-2">
           <Editor />

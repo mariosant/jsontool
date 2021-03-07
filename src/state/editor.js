@@ -1,7 +1,15 @@
 import create from 'zustand';
 import { fromThrowable } from 'neverthrow';
+import jsonPath from 'jsonpath';
 
 const safeParse = fromThrowable(JSON.parse);
+
+const safeJsonQuery = fromThrowable((text, path) => {
+  const obj = JSON.parse(text);
+  const filtered = jsonPath.query(obj, path);
+
+  return JSON.stringify(filtered, null, 2);
+});
 
 const prettify = (value) => {
   const operation = fromThrowable((v) =>
@@ -25,17 +33,41 @@ const minify = (value) => {
 
 export const useEditor = create((set, get) => ({
   value: `{"lorem": "ipsum"}`,
+  navigationValue: '',
+  navigation: '',
   isValid: true,
-  setValue: (nextValue) =>
+
+  setValue: (nextValue) => {
+    const { navigation } = get();
+    if (navigation.length) return;
+
     set({
+      navigation: '',
+      navigationValue: nextValue,
       value: nextValue,
       isValid: safeParse(nextValue).isOk(),
-    }),
+    });
+  },
+
+  setNavigation: (nextNavigation) => {
+    const { value, navigationValue } = get();
+    const { value: nextNavigationValue, isOk } = safeJsonQuery(
+      value,
+      nextNavigation,
+    );
+
+    set({
+      navigationValue: isOk() ? nextNavigationValue : navigationValue,
+      navigation: nextNavigation,
+    });
+  },
+
   prettify: () => {
     const { value, setValue } = get();
 
     setValue(prettify(value));
   },
+
   minify: () => {
     const { value, setValue } = get();
 

@@ -1,6 +1,7 @@
 import create from 'zustand';
 import { fromThrowable } from 'neverthrow';
 import jsonPath from 'jsonpath';
+import { isEmpty } from '@app/lib/isEmpty.js';
 
 const safeParse = fromThrowable(JSON.parse);
 
@@ -63,14 +64,14 @@ export const useEditor = create((set, get) => ({
   },
 
   prettify: () => {
-    const { value, setValue } = get();
+    const { value, navigation, setValue } = get();
 
-    setValue(prettify(value));
+    isEmpty(navigation) && setValue(prettify(value));
   },
 
   minify: () => {
     const { value, setValue } = get();
 
-    setValue(minify(value));
+    isEmpty(navigation) && setValue(minify(value));
   },
 }));

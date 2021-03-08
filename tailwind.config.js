@@ -1,3 +1,5 @@
+const typography = require('@tailwindcss/typography');
+
 module.exports = {
   purge: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx'],
   darkMode: false, // or 'media' or 'class'
@@ -13,5 +15,5 @@ module.exports = {
       opacity: ['disabled'],
     },
   },
-  plugins: [],
+  plugins: [typography],
 };

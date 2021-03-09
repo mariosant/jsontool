@@ -2,6 +2,7 @@ import * as React from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import 'codemirror/keymap/sublime';
 import 'codemirror/theme/monokai.css';
+import { isEmpty } from '@app/lib/isEmpty.js';
 import { useEditor } from '@app/state/editor.js';
 
 const Button = ({ children, className, ...props }) => (
@@ -14,6 +15,8 @@ const Button = ({ children, className, ...props }) => (
 );
 
 export const Editor = () => {
+  const editorRef = React.useRef();
+
   const {
     value,
     navigationValue,
@@ -25,11 +28,23 @@ export const Editor = () => {
     minify,
   } = useEditor();
 
+  React.useEffect(() => {
+    const {
+      current: { editor },
+    } = editorRef;
+
+    isEmpty(navigation)
+      ? editor?.setOption('readOnly', false)
+      : editor?.setOption('readOnly', 'nocursor');
+  }, [navigation]);
+
   const onChangeEditor = (editor) => {
     setValue(editor.getValue());
   };
 
-  const onChangeNavigation = (event) => setNavigation(event.target.value);
+  const onChangeNavigation = (event) => {
+    setNavigation(event.target.value);
+  };
 
   return (
     <div className="bg-white border border-gray-300 rounded-lg shadow-md">
@@ -51,6 +66,7 @@ export const Editor = () => {
       </div>
 
       <CodeMirror
+        ref={editorRef}
         value={navigation.trim().length > 0 ? navigationValue : value}
         options={{
           lineNumbers: false,
@@ -73,7 +89,6 @@ export const Editor = () => {
           readOnly={!isValid}
           value={navigation}
           onChange={onChangeNavigation}
-          onBlur={() => setNavigation('')}
           className="w-full px-2 font-mono bg-transparent rounded-b-lg focus:outline-none"
         />
       </div>

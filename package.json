@@ -10,11 +10,11 @@
     "@feedback-fish/react": "^1.2.1",
     "@tailwindcss/typography": "^0.4.0",
     "@uiw/react-codemirror": "^3.0.5",
+    "copy-to-clipboard": "^3.3.1",
     "jsonpath": "^1.1.0",
     "neverthrow": "^4.1.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-simple-code-editor": "^0.11.0",
     "tailwindcss": "^2.0.3",
     "zustand": "^3.3.3"
   },

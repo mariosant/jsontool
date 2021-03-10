@@ -1,4 +1,5 @@
 import * as React from 'react';
+import copy from 'copy-to-clipboard';
 import CodeMirror from '@uiw/react-codemirror';
 import 'codemirror/keymap/sublime';
 import 'codemirror/theme/monokai.css';
@@ -16,6 +17,7 @@ const Button = ({ children, className, ...props }) => (
 
 export const Editor = () => {
   const editorRef = React.useRef();
+  const [copyState, setCopy] = React.useState(false);
 
   const {
     value,
@@ -46,12 +48,23 @@ export const Editor = () => {
     setNavigation(event.target.value);
   };
 
+  const onCopy = () => {
+    copy(value, {
+      onCopy: () => {
+        setCopy(true);
+        setTimeout(() => setCopy(false), 3000);
+      },
+    });
+  };
+
   return (
     <div className="bg-white border border-gray-300 rounded-lg shadow-md">
       <div className="flex w-full border-b border-gray-300">
         <Button onClick={prettify}>Prettify</Button>
         <Button onClick={minify}>Minify</Button>
-        <Button disabled>Copy</Button>
+        <Button disabled={copyState} onClick={onCopy}>
+          {copyState ? `Copied!` : `Copy`}
+        </Button>
         <Button disabled>Share</Button>
         <Button disabled>Full screen</Button>
         <div className="flex-grow w-auto"></div>

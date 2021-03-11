@@ -1,7 +1,13 @@
+import jsonlint from 'jsonlint-mod';
+window.jsonlint = jsonlint;
 import * as React from 'react';
 import copy from 'copy-to-clipboard';
 import CodeMirror from '@uiw/react-codemirror';
-import 'codemirror/keymap/sublime';
+import 'codemirror/mode/javascript/javascript.js';
+import 'codemirror/addon/lint/lint.css';
+import 'codemirror/addon/lint/lint';
+import 'codemirror/addon/lint/json-lint';
+import 'codemirror/keymap/sublime.js';
 import 'codemirror/theme/monokai.css';
 import { isEmpty } from '@app/lib/isEmpty.js';
 import { useEditor } from '@app/state/editor.js';
@@ -82,11 +88,15 @@ export const Editor = () => {
         ref={editorRef}
         value={navigation.trim().length > 0 ? navigationValue : value}
         options={{
-          lineNumbers: false,
-          keyMap: 'sublime',
-          matchBrackets: true,
-          autoCloseBrackets: true,
           mode: 'application/json',
+          gutters: ['CodeMirror-lint-markers'],
+          styleActiveLine: true,
+          lineNumbers: true,
+          line: true,
+          lint: { esversion: '8' },
+          autoCloseBrackets: true,
+          matchBrackets: true,
+          keyMap: 'sublime',
         }}
         height="60vh"
         onChange={(editor) => onChangeEditor(editor)}

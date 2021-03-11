@@ -70,7 +70,7 @@ export const useEditor = create((set, get) => ({
   },
 
   minify: () => {
-    const { value, setValue } = get();
+    const { value, navigation, setValue } = get();
 
     isEmpty(navigation) && setValue(minify(value));
   },

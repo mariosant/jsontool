@@ -1,5 +1,6 @@
 .env
 .snowpack
+.vercel
 build
 node_modules
-.vercel
+yarn-error.log

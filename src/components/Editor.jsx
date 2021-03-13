@@ -10,6 +10,7 @@ import 'codemirror/addon/lint/json-lint';
 import 'codemirror/keymap/sublime.js';
 import 'codemirror/theme/monokai.css';
 import { isEmpty } from '@app/lib/isEmpty.js';
+import { getKeys } from '@app/lib/getKeys';
 import { useEditor } from '@app/state/editor.js';
 
 const Button = ({ children, className, ...props }) => (
@@ -20,6 +21,35 @@ const Button = ({ children, className, ...props }) => (
     {children}
   </button>
 );
+
+const SearchInput = ({ onSearch, ...props }) => {
+  const { isValid, navigationValue } = useEditor();
+
+  const [state, setState] = React.useState('');
+
+  const onChange = (event) => {
+    setState(event.target.value);
+
+    if (event.target.value === '') {
+      onSearch('');
+    }
+  };
+
+  const handleEnterKey = (event) => {
+    if (event.keyCode === 13) {
+      onSearch(state);
+    }
+  };
+
+  return (
+    <input
+      type="search"
+      onChange={onChange}
+      onKeyUp={handleEnterKey}
+      {...props}
+    />
+  );
+};
 
 export const Editor = () => {
   const editorRef = React.useRef();
@@ -48,10 +78,6 @@ export const Editor = () => {
 
   const onChangeEditor = (editor) => {
     setValue(editor.getValue());
-  };
-
-  const onChangeNavigation = (event) => {
-    setNavigation(event.target.value);
   };
 
   const onCopy = () => {
@@ -103,15 +129,14 @@ export const Editor = () => {
       />
 
       <div
-        className={`flex items-center justify-between h-10 border-t border-gray-300`}
+        className={`flex items-center justify-between h-10 border-t border-gray-300 relative`}
       >
-        <input
+        <SearchInput
           type="search"
           placeholder="$.navigate[]"
           spellCheck={false}
           readOnly={!isValid}
-          value={navigation}
-          onChange={onChangeNavigation}
+          onSearch={setNavigation}
           className="w-full px-2 font-mono bg-transparent rounded-b-lg focus:outline-none"
         />
       </div>

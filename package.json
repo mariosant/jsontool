@@ -2,7 +2,7 @@
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build",
-    "test": "web-test-runner \"src/**/*.test.jsx\"",
+    "test": "web-test-runner \"src/**/*.test.{js,jsx}\"",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "lint": "prettier --check \"src/**/*.{js,jsx}\""
   },
@@ -14,6 +14,7 @@
     "jsonlint-mod": "^1.7.6",
     "jsonpath": "^1.1.0",
     "neverthrow": "^4.1.1",
+    "ramda": "^0.27.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "tailwindcss": "^2.0.3",
